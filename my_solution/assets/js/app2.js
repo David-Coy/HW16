@@ -25,7 +25,7 @@ var chartGroup = svg
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Initial Params
-var chosenXAxis = "hair_length";
+var chosenXAxis = "poverty";
 
 // function used for updating x-scale var upon click on axis label
 function xScale(hairData, chosenXAxis) {
@@ -65,7 +65,7 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 function updateToolTip(chosenXAxis, circlesGroup) {
   var label;
 
-  if (chosenXAxis === "hair_length") {
+  if (chosenXAxis === "poverty") {
     label = "Hair Length:";
   } else {
     label = "# of Albums:";
@@ -76,7 +76,7 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     .attr("class", "tooltip")
     .offset([1, -1])
     .html(function (d) {
-      return `${d.rockband}<br>${label} ${d[chosenXAxis]}`;
+      return `${d.poverty}<br>${label} ${d[chosenXAxis]}`;
     });
 
   circlesGroup.call(toolTip);
@@ -94,15 +94,15 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 }
 
 // Retrieve data from the CSV file and execute everything below
-d3.csv("untitled folder/assets/data/data.csv")
+d3.csv("assets/data/data.csv")
   .then(function (hairData, err) {
     if (err) throw err;
 
     // parse data
     hairData.forEach(function (data) {
-      data.hair_length = +data.hair_length;
-      data.num_hits = +data.num_hits;
-      data.num_albums = +data.num_albums;
+      data.poverty = +data.poverty;
+      //data.num_hits = +data.num_hits;
+      //data.num_albums = +data.num_albums;
     });
 
     // xLinearScale function above csv import
@@ -111,7 +111,7 @@ d3.csv("untitled folder/assets/data/data.csv")
     // Create y scale function
     var yLinearScale = d3
       .scaleLinear()
-      .domain([0, d3.max(hairData, (d) => d.num_hits)])
+      .domain([0, d3.max(hairData, (d) => d.obesity)])
       .range([height, 0]);
 
     // Create initial axis functions
@@ -135,9 +135,9 @@ d3.csv("untitled folder/assets/data/data.csv")
       .enter()
       .append("circle")
       .attr("cx", (d) => xLinearScale(d[chosenXAxis]))
-      .attr("cy", (d) => yLinearScale(d.num_hits))
+      .attr("cy", (d) => yLinearScale(d.obesity))
       .attr("r", 20)
-      .attr("fill", "pink")
+      .attr("fill", "red")
       .attr("opacity", ".5");
 
     // Create group for two x-axis labels
@@ -149,7 +149,7 @@ d3.csv("untitled folder/assets/data/data.csv")
       .append("text")
       .attr("x", 0)
       .attr("y", 20)
-      .attr("value", "hair_length") // value to grab for event listener
+      .attr("value", "poverty") // value to grab for event listener
       .classed("active", true)
       .text("Hair Metal Ban Hair Length (inches)");
 
@@ -159,7 +159,7 @@ d3.csv("untitled folder/assets/data/data.csv")
       .attr("y", 40)
       .attr("value", "num_albums") // value to grab for event listener
       .classed("inactive", true)
-      .text("# of Albums Released");
+      .text("Poverty (%)");
 
     // append y axis
     chartGroup
@@ -169,7 +169,7 @@ d3.csv("untitled folder/assets/data/data.csv")
       .attr("x", 0 - height / 2)
       .attr("dy", "1em")
       .classed("axis-text", true)
-      .text("Number of Billboard 500 Hits");
+      .text("Obesity (%)");
 
     // updateToolTip function above csv import
     var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
