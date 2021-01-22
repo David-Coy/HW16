@@ -151,7 +151,7 @@ d3.csv("assets/data/data.csv")
       .attr("y", 20)
       .attr("value", "poverty") // value to grab for event listener
       .classed("active", true)
-      .text("Hair Metal Ban Hair Length (inches)");
+      .text("Poverty (%");
 
     var albumsLabel = labelsGroup
       .append("text")
@@ -159,7 +159,7 @@ d3.csv("assets/data/data.csv")
       .attr("y", 40)
       .attr("value", "num_albums") // value to grab for event listener
       .classed("inactive", true)
-      .text("Poverty (%)");
+      .text("Some Other selected X-axis)");
 
     // append y axis
     chartGroup
